@@ -3,18 +3,18 @@
 //
 #include "Board.hpp"
 namespace pandemic {
-  Board::Board(bool testing_purposes)
-  {
-    data_map.insert(std::make_pair(City::Atlanta, CityData{}));
-  }
 Board::Board() {
+  //make sure no funny business
+  data_map.clear();
+  color_map.clear();
+  enum_map.clear();
+  cured_diseases.clear();
   // Populate color_map
   color_map.insert(std::make_pair("Yellow", Color::Yellow));
   color_map.insert(std::make_pair("Black", Color::Black));
   color_map.insert(std::make_pair("Blue", Color::Blue));
   color_map.insert(std::make_pair("Red", Color::Red));
   // populate enum_map
-  std::unordered_map<std::string, City> enum_map;
   std::string file_path = "cities_map.txt";
   std::ifstream is(file_path);
   std::string str;
@@ -55,6 +55,9 @@ Board::Board() {
       counter++;
     } while (istr);
   }
+  // error with file
+  data_map.at(City::Manila).neighbors.insert(City::HongKong);
+  data_map.at(City::HongKong).neighbors.insert(City::Manila);
 }
 bool Board::cured(Color c) {
   return cured_diseases.find(c) != cured_diseases.end();
@@ -106,7 +109,10 @@ bool Board::has_neighbor(City c, City t) {
 
 void Board::set_center(City c, bool center)
 {
-  data_map.at(c).center = center;
+  if(valid_city(c))
+  {
+      data_map.at(c).center = center;
+  }
 }
 
 bool Board::valid_city(City c)
@@ -120,7 +126,7 @@ bool Board::valid_city(City c)
       {
         return;
       }
-      data_map.at(c).level--;
+      data_map.at(c).level = 0;
 
   }
 

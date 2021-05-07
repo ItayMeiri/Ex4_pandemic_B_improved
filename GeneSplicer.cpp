@@ -6,15 +6,14 @@ namespace pandemic {
 GeneSplicer::GeneSplicer(Board &board, City city) : Player(board, city) {
   // nothing
 }
-Player& GeneSplicer::discover_cure(Color c) {
-    const int temp = 5;
-    if(!board.has_center(current_city))
-        {
-            throw std::invalid_argument("This city has no center!!");
-        }
+Player &GeneSplicer::discover_cure(Color c) {
+  const int temp = 5;
+  if (!board.has_center(current_city)) {
+    throw std::invalid_argument("This city has no center!!");
+  }
   if (board.cured(c)) {
-      return *this;
-    }
+    return *this;
+  }
   if (cards.size() < temp) {
     throw std::invalid_argument("Not enough cards");
   }

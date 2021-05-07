@@ -3,40 +3,30 @@
 //
 
 #include "Dispatcher.hpp"
-namespace pandemic
-{
+namespace pandemic {
 
-    Dispatcher::Dispatcher(Board &board, City city) : Player(board, city)
-    {
+Dispatcher::Dispatcher(Board &board, City city) : Player(board, city) {}
 
-    }
+// can fly directly without throwing card, if the city has research center
+Player &Dispatcher::fly_direct(City c) {
+  if (!board.valid_city(c)) {
+    throw std::invalid_argument("Bad city name");
+  }
+  if (c == current_city) {
+    throw std::invalid_argument("Can't fly to your own city!");
+  }
+  if (board.has_center(current_city)) {
 
-    //can fly directly without throwing card, if the city has research center
-    Player &Dispatcher::fly_direct(City c)
-    {
-        if(!board.valid_city(c))
-        {
-            throw std::invalid_argument("Bad city name");
-        }
-        
-        if(board.has_center(current_city))
-        {
-            current_city = c;
-            return *this;
-        }
-        if(cards.find(c) == cards.end())
-        {
-            //you don't have this card
-            throw std::invalid_argument("No card for this city");
-        }
-        current_city = c;
-        cards.erase(c);
-        return *this;
-    }
-
-
-    std::string Dispatcher::role()
-    {
-        return "Dispatcher";
-    }
+    current_city = c;
+    return *this;
+  }
+  if (cards.find(c) == cards.end()) {
+    throw std::invalid_argument("No card for this city");
+  }
+  current_city = c;
+  cards.erase(c);
+  return *this;
 }
+
+std::string Dispatcher::role() { return "Dispatcher"; }
+} // namespace pandemic

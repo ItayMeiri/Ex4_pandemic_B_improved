@@ -9,7 +9,6 @@
 #include <unordered_map>
 #include <fstream>
 #include <iostream>
-#include <istream>
 #include <sstream>
 #include <string>
 namespace pandemic{
@@ -24,9 +23,8 @@ namespace pandemic{
             std::unordered_set<City> neighbors;
         };
         Board(); // This will read the file, and initialize all the CityData stats
-        Board(bool testing_purposes);
         std::unordered_map<City, CityData> data_map; // city citydata
-        std::unordered_map<std::string, City> city_enum; // string city
+        std::unordered_map<std::string, City> enum_map; // string city
         std::unordered_map<std::string, Color> color_map; // string color
         std::unordered_set<Color> cured_diseases; // initialize this to false
         bool cured(Color c); // checks if color disease is cured

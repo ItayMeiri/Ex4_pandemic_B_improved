@@ -9,7 +9,6 @@ namespace pandemic
 
     Medic::Medic(Board &board, City city) : Player(board, city)
     {
-        //nothing
         Color clr = board.get_color(current_city);
         if(board.cured(clr))
         {
@@ -19,18 +18,18 @@ namespace pandemic
     }
     Player &Medic::treat(City city)
     {
+        std::cout<<"the level is " << board.get_level(city) << " \n";
+
         if(city != current_city)
         {
             throw std::invalid_argument("You're not in this city");
         }
-        if(board.cured(board.get_color(city)))
+
+        if(board.get_level(current_city) <= 0)
         {
-            if(board.get_level(city) == 0)
-            {
-                throw std::invalid_argument("The level is already 0");
-            }
+            throw std::invalid_argument("The level is already 0");
         }
-        board.data_map.at(city).level = 0;
+        board.data_map.at(current_city).level = 0;
         return *this;
     }
     std::string Medic::role()

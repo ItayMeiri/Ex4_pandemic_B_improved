@@ -10,13 +10,17 @@ Player::Player(Board &board, City city) : board(board) {
 }
 
 Player &Player::build() {
+  if(!board.valid_city(current_city))
+  {
+    throw std::invalid_argument("Bad city");
+  }
   if (board.has_center(current_city)) {
     return *this;
   }
   if (cards.find(current_city) == cards.end()) {
     throw std::invalid_argument("Has no cards");
   }
-  board.data_map.at(current_city).center = true;
+  board.set_center(current_city, true);
   cards.erase(current_city); // throw card
   return *this;
 }
@@ -44,6 +48,10 @@ Player &Player::discover_cure(Color color) {
   return *this;
 }
 Player &Player::drive(City city) {
+    if(city == current_city)
+  {
+    throw std::invalid_argument("You can't drive to your own city!");
+  }
   if (!board.has_neighbor(current_city, city)) {
     if(!board.has_neighbor(city, current_city))
     {
@@ -58,6 +66,10 @@ Player &Player::drive(City city) {
   return *this;
 }
 Player &Player::fly_charter(City city) {
+  if(city == current_city)
+  {
+    throw std::invalid_argument("You can't fly to your own city!");
+  }
   if (cards.find(current_city) == cards.end()) {
     throw std::invalid_argument("You don't have this city!");
   }
@@ -85,9 +97,9 @@ Player &Player::fly_direct(City city) { // flies to card
   return *this;
 }
 Player &Player::fly_shuttle(City city) {
-  // if (city == current_city) {
-  //   return *this;
-  //   }
+  if (city == current_city) {
+    throw std::invalid_argument("Can't fly to your own city");
+    }
   if (!(board.has_center(city) && board.has_center(current_city))) {
     throw std::invalid_argument("This city doesn't have a center");
   }

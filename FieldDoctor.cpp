@@ -18,7 +18,7 @@ Player &FieldDoctor::treat(City c) {
   if (board.data_map.find(c) == board.data_map.end()) {
     throw std::invalid_argument("Invalid city");
   }
-  if (board.get_level(c)  < 0) {
+  if (board.get_level(c)  <= 0) {
     throw std::invalid_argument("No sick cubes");
   }
   if (board.cured(board.get_color(c))) {
